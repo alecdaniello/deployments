@@ -139,11 +139,11 @@ services:
       KONG_PORTAL_GUI_LISTEN: 0.0.0.0:8003
       KONG_PORTAL_GUI_HOST: localhost:8003
       KONG_PORTAL_GUI_PROTOCOL: http
-      KONG_PORTAL_GUI_AUTH: openid-connect
+      KONG_PORTAL_GUI_AUTH: basic-auth
       #KONG_PORTAL_AUTH_CONF: '{"issuer": "https://dev-994001.okta.com/oauth2/default", "client_id": ["0oaq5d9ajjJ4wVmGr356"], "client_secret": ["2YWXH2z_X47cRKd4A-z0Dp7vdeilh-uwjWEb5Hnk"], "consumer_by": ["username","custom_id","id"], "consumer_claim": ["email"], "leeway": 1000, "login_action": "redirect", "login_redirect_uri": ["http://localhost:8003"], "redirect_uri":["http://localhost:8004/auth"], "logout_methods": ["GET","DELETE"], "logout_query_arg": "logout", "logout_redirect_uri": ["http://localhost:8003"], "scopes": ["openid","profile","email"],  "login_redirect_mode": "query", "session_cookie_domain":"localhost"}'
       #KONG_PORTAL_SESSION_CONF: '{"cookie_secure":false,"cookie_name":"portal_session","secret":"changeme","storage":"kong", "cookie_domain":"localhost"}'
-      KONG_PORTAL_AUTH_CONF: '{"issuer": "https://login.microsoftonline.com/bf894af0-ef64-44a4-af9c-5b8ab1c4b860/v2.0", "client_id": ["e3e3f7ca-3e02-4137-bcba-1b3ec4fb0460"], "client_secret": ["Thuzues1r8g1wtW3DZjXR~.H58-2~9V~H-"], "consumer_by": ["username","custom_id"], "consumer_claim": ["email"], "leeway": 1000,"login_action": "redirect","redirect_uri":["http://localhost:8004/auth"], "login_redirect_uri": ["http://localhost:8003"], "logout_methods": ["GET"], "logout_query_arg": "logout", "logout_redirect_uri": ["http://localhost:8003"], "scopes": ["openid","email","e3e3f7ca-3e02-4137-bcba-1b3ec4fb0460/.default"], "auth_methods": ["authorization_code", "session"], "verify_parameters": false }'
-      KONG_PORTAL_SESSION_CONF: '{ "cookie_name":"portal_session","secret":"passw0rd","storage":"kong","cookie_secure":false}'
+      #KONG_PORTAL_AUTH_CONF: '{"issuer": "https://login.microsoftonline.com/bf894af0-ef64-44a4-af9c-5b8ab1c4b860/v2.0", "client_id": ["e3e3f7ca-3e02-4137-bcba-1b3ec4fb0460"], "client_secret": ["Thuzues1r8g1wtW3DZjXR~.H58-2~9V~H-"], "consumer_by": ["username","custom_id"], "consumer_claim": ["email"], "leeway": 1000,"login_action": "redirect","redirect_uri":["http://localhost:8004/auth"], "login_redirect_uri": ["http://localhost:8003"], "logout_methods": ["GET"], "logout_query_arg": "logout", "logout_redirect_uri": ["http://localhost:8003"], "scopes": ["openid","email","e3e3f7ca-3e02-4137-bcba-1b3ec4fb0460/.default"], "auth_methods": ["authorization_code", "session"], "verify_parameters": false }'
+      #KONG_PORTAL_SESSION_CONF: '{ "cookie_name":"portal_session","secret":"passw0rd","storage":"kong","cookie_secure":false}'
       KONG_SMTP_MOCK: "off"
       KONG_SMTP_HOST: smtp.gmail.com
       KONG_SMTP_PORT: 587
