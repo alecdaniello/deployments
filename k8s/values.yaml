@@ -1,12 +1,10 @@
 image:
-  repository: kong-docker-kong-enterprise-edition-docker.bintray.io/kong-enterprise-edition
-  tag: 2.3.2.0-alpine
-  pullSecrets:
-    - kong-enterprise-edition-docker
+  repository: kong/kong-gateway
+  tag: 2.5.0.0-alpine
 
 env:
-  admin_gui_listen: 0.0.0.0:8002, 0.0.0.0:8445 ssl
-  admin_listen: 0.0.0.0:8001, 0.0.0.0:8444 ssl
+  admin_gui_listen: 0.0.0.0:28002, 0.0.0.0:28445 ssl
+  admin_listen: 0.0.0.0:28001, 0.0.0.0:28444 ssl
   database: postgres
   log_level: debug
   audit_log: on
@@ -38,8 +36,8 @@ admin:
     # Enable plaintext HTTP listen for the admin API
     # Disabling this and using a TLS listen only is recommended for most configuration
     enabled: true
-    servicePort: 8001
-    containerPort: 8001
+    servicePort: 28001
+    containerPort: 28001
     # Set a nodePort which is available if service type is NodePort
     # nodePort: 32080
     # Additional listen parameters, e.g. "reuseport", "backlog=16384"
@@ -48,8 +46,8 @@ admin:
 
   tls:
     enabled: true
-    servicePort: 8444
-    containerPort: 8444
+    servicePort: 28444
+    containerPort: 28444
     parameters:
     - http2
 
@@ -68,14 +66,14 @@ proxy:
 
   http:
     enabled: true
-    servicePort: 9999
-    containerPort: 8000
+    servicePort: 29999
+    containerPort: 28000
     parameters: []
 
   tls:
     enabled: true
-    servicePort: 9943
-    containerPort: 8443
+    servicePort: 29943
+    containerPort: 28443
     parameters:
     - http2
 
@@ -155,13 +153,13 @@ manager:
 
   http:
     enabled: true
-    servicePort: 8002
-    containerPort: 8002
+    servicePort: 28002
+    containerPort: 28002
 
   tls:
     enabled: true
-    servicePort: 8445
-    containerPort: 8445
+    servicePort: 28445
+    containerPort: 28445
     parameters:
     - http2
     - https
@@ -183,14 +181,14 @@ portal:
 
   http:
     enabled: true
-    servicePort: 8003
-    containerPort: 8003
+    servicePort: 28003
+    containerPort: 28003
     parameters: []
 
   tls:
     enabled: true
-    servicePort: 8446
-    containerPort: 8446
+    servicePort: 28446
+    containerPort: 28446
     parameters:
     - http2
 
@@ -206,14 +204,14 @@ portalapi:
 
   http:
     enabled: true
-    servicePort: 8004
-    containerPort: 8004
+    servicePort: 28004
+    containerPort: 28004
     parameters: []
 
   tls:
     enabled: true
-    servicePort: 8447
-    containerPort: 8447
+    servicePort: 28447
+    containerPort: 28447
     parameters:
     - http2
 
