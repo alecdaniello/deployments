@@ -1,0 +1,236 @@
+image:
+  repository: kong/kong-gateway
+  tag: 2.5.0.0-alpine
+
+env:
+  admin_gui_listen: 0.0.0.0:28002, 0.0.0.0:28445 ssl
+  admin_listen: 0.0.0.0:28001, 0.0.0.0:28444 ssl
+  database: "off"
+  log_level: debug
+  audit_log: on
+  admin_gui_auth_conf_secret: kong-session-config
+
+  password:
+    valueFrom:
+      secretKeyRef:
+        name: kong-enterprise-superuser-password
+        key: password
+  kong_admin_token:
+    valueFrom:
+      secretKeyRef:
+        name: kong-enterprise-superuser-password
+        key: password
+  # admin_gui_session_conf:
+  #     valueFrom:
+  #     secretKeyRef:
+  #       name: kong-session-config
+  #       key: admin_gui_session_conf
+
+admin:
+  enabled: true
+  type: LoadBalancer
+  annotations:
+    konghq.com/protocol: "https"
+
+  http:
+    # Enable plaintext HTTP listen for the admin API
+    # Disabling this and using a TLS listen only is recommended for most configuration
+    enabled: true
+    servicePort: 28001
+    containerPort: 28001
+    # Set a nodePort which is available if service type is NodePort
+    # nodePort: 32080
+    # Additional listen parameters, e.g. "reuseport", "backlog=16384"
+    parameters:
+    - http
+
+  tls:
+    enabled: true
+    servicePort: 28444
+    containerPort: 28444
+    parameters:
+    - http2
+
+  # ingress:
+  #   enabled: true
+  #   tls: kong
+  #   hostname: admin.kong.dascole.com
+  #   annotations:
+  #     kubernetes.io/ingress.class: "kong"
+  #   path: /
+
+proxy:
+  enabled: true
+  type: LoadBalancer
+  annotations: {}
+
+  http:
+    enabled: true
+    servicePort: 29999
+    containerPort: 28000
+    parameters: []
+
+  tls:
+    enabled: true
+    servicePort: 29943
+    containerPort: 28443
+    parameters:
+    - http2
+
+  stream: {}
+
+  # ingress:
+  #   enabled: true
+  #   hosts: []
+  #   annotations:
+  #     plugins.konghq.com: rl-by-ip
+  #   path: /
+
+  externalIPs: []
+# Enable/disable migration jobs, and set annotations for them
+#migrations:
+  # Enable pre-upgrade migrations (run "kong migrations up")
+  #preUpgrade: false
+  # Enable post-upgrade migrations (run "kong migrations finish")
+  #postUpgrade: false
+  # Annotations to apply to migrations jobs
+  # By default, these disable service mesh sidecar injection for Istio and Kuma,
+  # as the sidecar containers do not terminate and prevent the jobs from completing
+  annotations:
+    sidecar.istio.io/inject: false
+    kuma.io/sidecar-injection: "disabled"
+
+# Custom Kong plugins can be loaded into Kong by mounting the plugin code
+# into the file-system of Kong container.
+# The plugin code should be present in ConfigMap or Secret inside the same
+# namespace as Kong is being installed.
+# The `name` property refers to the name of the ConfigMap or Secret
+# itself, while the pluginName refers to the name of the plugin as it appears
+# in Kong.
+# Subdirectories (which are optional) require separate ConfigMaps/Secrets.
+# "path" indicates their directory under the main plugin directory: the example
+# below will mount the contents of kong-plugin-rewriter-migrations at "/opt/kong/rewriter/migrations".
+plugins: {}
+  # configMaps:
+  # - pluginName: rewriter
+  #   name: kong-plugin-rewriter
+  #   subdirectories:
+  #   - name: kong-plugin-rewriter-migrations
+  #     path: migrations
+  # secrets:
+  # - pluginName: rewriter
+  #   name: kong-plugin-rewriter
+# Inject specified secrets as a volume in Kong Container at path /etc/secrets/{secret-name}/
+# This can be used to override default SSL certificates.
+# Be aware that the secret name will be used verbatim, and that certain types
+# of punctuation (e.g. `.`) can cause issues.
+# Example configuration
+# secretVolumes:
+# - kong-proxy-tls
+# - kong-admin-tls
+# secretVolumes:
+#   - kong-mngr-tls
+#   - kong-proxy-tls
+#   - kong-admin-tls
+
+enterprise:
+  enabled: true
+  license_secret: kong-enterprise-license
+  vitals:
+    enabled: false
+  portal:
+    enabled: true
+#  rbac:
+#    enabled: false
+#    admin_gui_auth: none
+#    admin_gui_auth_conf_secret: kong-session-config
+
+manager:
+  enabled: true
+  type: LoadBalancer
+  annotations:
+    konghq.com/protocol: "https"
+
+  http:
+    enabled: true
+    servicePort: 28002
+    containerPort: 28002
+
+  tls:
+    enabled: true
+    servicePort: 28445
+    containerPort: 28445
+    parameters:
+    - http2
+    - https
+
+  # ingress:
+  #   enabled: true
+  #   tls: kong
+  #   hostname: manager.kong.daniello.com
+  #   annotations: {}
+  #   path: /
+
+  externalIPs: []
+
+portal:
+  enabled: true
+  type: LoadBalancer
+  annotations:
+    konghq.com/protocol: "https"
+
+  http:
+    enabled: true
+    servicePort: 28003
+    containerPort: 28003
+    parameters: []
+
+  tls:
+    enabled: true
+    servicePort: 28446
+    containerPort: 28446
+    parameters:
+    - http2
+
+  externalIPs: []
+
+portalapi:
+  enabled: true
+  type: LoadBalancer
+  annotations:
+    konghq.com/protocol: "https"
+
+  http:
+
+  http:
+    enabled: true
+    servicePort: 28004
+    containerPort: 28004
+    parameters: []
+
+  tls:
+    enabled: true
+    servicePort: 28447
+    containerPort: 28447
+    parameters:
+    - http2
+
+  externalIPs: []
+
+postgresql:
+  enabled: false
+  postgresqlUsername: kong
+  postgresqlPassword: kong
+  postgresqlDatabase: kong
+  service:
+    port: 5432
+
+ingressController:
+  enabled: true
+  installCRDs: false
+  env:
+    kong_admin_token:
+      valueFrom:
+        secretKeyRef:
+          name: kong-enterprise-superuser-password
+          key: password
