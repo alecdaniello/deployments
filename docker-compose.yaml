@@ -13,6 +13,8 @@ services:
       POSTGRES_PASSWORD: kong
       POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_DB: kong
+    ports:
+      - "5432:5432/tcp"
 #Running the migrations here
   kong-migrations:
     image: docker.io/kong/kong-gateway:2.5.0.0
